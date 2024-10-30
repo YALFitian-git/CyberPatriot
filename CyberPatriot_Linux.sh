@@ -19,3 +19,10 @@ checkUnnecessaryFiles() {
 listPackages() {
     dpkg-query -W -f='${binary:Package} : ${binary:Summary}\n'
 }
+
+listServices() {
+    systemctl list-units --type=service --state=loaded --no-pager --no-legend | awk '{print $1}' | while read -r service; do
+        description=$(systemctl show -p Description --value "$service")
+        echo "$service : $description"
+    done
+}
