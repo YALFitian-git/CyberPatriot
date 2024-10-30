@@ -15,3 +15,7 @@ checkUnnecessaryFiles() {
         find "$home_dir" -type f \( -name "*.mp3" -o -name "*.wav" -o -name "*.png" -o -name "*.jpg" \) ! -path "*/.*" -print
     done
 }
+
+listPackages() {
+    dpkg-query -W -f='${binary:Package} : ${binary:Summary}\n'
+}
