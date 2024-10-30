@@ -26,3 +26,7 @@ listServices() {
         echo "$service : $description"
     done
 }
+
+listPrograms() {
+    dpkg-query -W -f='${binary:Package} : ${binary:Summary}\n' | grep -v -E 'linux-image|^lib|^gnome|^kde|^systemd|^apt|^dpkg|^base|^debian|^firmware'
+}
