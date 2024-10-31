@@ -1,4 +1,4 @@
-getAllUsers() {
+listAllUsers() {
     awk -F: '$3 >= 1000 {print $1}' /etc/passwd | while read -r user; do
         if groups "$user" | grep -qE '\bsudo\b|\bwheel\b'; then
             echo "$user (Administrator)"
@@ -30,3 +30,34 @@ listServices() {
 listPrograms() {
     dpkg-query -W -f='${binary:Package} : ${binary:Summary}\n' | grep -v -E 'linux-image|^lib|^gnome|^kde|^systemd|^apt|^dpkg|^base|^debian|^firmware'
 }
+
+echo "Choose your option:"
+echo "1. List all Users"
+echo "2. Check for unnecessary files"
+echo "3. List packages"
+echo "4. List services"
+echo "5. List programs"
+echo "6. Exit"
+echo ""
+read -p "Enter your choice: " choice
+
+case $choice in
+    1)
+        listAllUsers
+        ;;
+    2)
+        checkUnnecessaryFiles
+        ;;
+    3)
+        listPackages
+        ;;
+    4)
+        listServices
+        ;;
+    5)
+        echo "Exiting..."
+        exit 0
+        ;;
+    *)
+        echo "Invalid option."
+esac
