@@ -55,6 +55,9 @@ case $choice in
         listServices
         ;;
     5)
+        listPrograms
+        ;;
+    6)
         echo "Exiting..."
         exit 0
         ;;
