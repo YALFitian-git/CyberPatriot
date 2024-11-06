@@ -39,7 +39,11 @@ listPrograms() {
     sudo dpkg-query -W -f='${binary:Package} : ${binary:Summary}\n' | grep -v -E 'linux-image|^lib|^gnome|^kde|^systemd|^apt|^dpkg|^base|^debian|^firmware' >> "$report_file"
 }
 
-
+checkEmptyPasswords() {
+    sudo awk -F: '($3 >= 1000) && ($2 == "") {print $1}' /etc/shadow | while read -r user; do
+    echo "$user" >> "$report_file"
+    done
+}
 
 while [[ true ]]; do
     sudo -v
@@ -50,7 +54,8 @@ while [[ true ]]; do
     echo "3. List packages"
     echo "4. List services"
     echo "5. List programs"
-    echo "6. Exit"
+    echo "6. Check for empty passwords"
+    echo "7. Exit"
     echo ""
     read -p "Enter your choice: " choice
 
@@ -76,6 +81,10 @@ while [[ true ]]; do
             echo "Listed all programs in "$report_file""
             ;;
         6)
+            checkEmptyPasswords
+            echo "Listed users with empty passwords in "$report_file""
+            ;;
+        7)
             echo "Exiting..."
             exit 0
             ;;
