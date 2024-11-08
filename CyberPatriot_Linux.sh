@@ -45,6 +45,11 @@ checkEmptyPasswords() {
     done
 }
 
+updatePackages()
+{
+    sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y
+}
+
 while [[ true ]]; do
     sudo -v
 
@@ -55,7 +60,8 @@ while [[ true ]]; do
     echo "4. List services"
     echo "5. List programs"
     echo "6. Check for empty passwords"
-    echo "7. Exit"
+    echo "7. Update packages"
+    echo "8. Exit"
     echo ""
     read -p "Enter your choice: " choice
 
@@ -85,6 +91,10 @@ while [[ true ]]; do
             echo "Listed users with empty passwords in "$report_file""
             ;;
         7)
+            updatePackages
+            echo "Updated all packages"
+            ;;
+        8)
             echo "Exiting..."
             exit 0
             ;;
