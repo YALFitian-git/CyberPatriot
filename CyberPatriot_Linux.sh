@@ -76,6 +76,9 @@ setPasswordPolicies()
     sudo sed -i "s/^PASS_MAX_DAYS.*/PASS_MAX_DAYS    $MAX_DAYS/" /etc/login.defs
     sudo sed -i "s/^PASS_MIN_DAYS.*/PASS_MIN_DAYS    $MIN_DAYS/" /etc/login.defs
     sudo sed -i "s/^PASS_WARN_AGE.*/PASS_WARN_AGE    $WARN_DAYS/" /etc/login.defs
+
+    sudo sed -i "/pam_pwquality.so/ s/$/ minlen=$MIN_LENGTH/" /etc/pam.d/common-password
+    sudo sed -i "/pam_unix.so/ s/$/ remember=$REMEMBER/" /etc/pam.d/common-password
 }
 
 while [[ true ]]; do
