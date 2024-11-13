@@ -50,6 +50,34 @@ updatePackages()
     sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y
 }
 
+lockRoot()
+{
+    sudo passwd -l root
+
+    if grep -q "^PermitRootLogin" /etc/ssh/sshd_config; then
+        sudo sed -i 's/^PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+    else
+        echo "PermitRootLogin no" | sudo tee -a /etc/ssh/sshd_config
+    fi
+
+    sudo systemctl restart sshd
+}
+
+setPasswordPolicies()
+{
+    MIN_LENGTH=12
+    MIN_DAYS=1
+    MAX_DAYS=90
+    WARN_DAYS=7
+    REMEMBER=5
+    MAX_RETRIES=3
+    UNLOCK_TIME=300
+
+    sudo sed -i "s/^PASS_MAX_DAYS.*/PASS_MAX_DAYS    $MAX_DAYS/" /etc/login.defs
+    sudo sed -i "s/^PASS_MIN_DAYS.*/PASS_MIN_DAYS    $MIN_DAYS/" /etc/login.defs
+    sudo sed -i "s/^PASS_WARN_AGE.*/PASS_WARN_AGE    $WARN_DAYS/" /etc/login.defs
+}
+
 while [[ true ]]; do
     sudo -v
 
@@ -61,7 +89,8 @@ while [[ true ]]; do
     echo "5. List programs"
     echo "6. Check for empty passwords"
     echo "7. Update packages"
-    echo "8. Exit"
+    echo "8. Lock root account"
+    echo "9. Exit"
     echo ""
     read -p "Enter your choice: " choice
 
@@ -95,6 +124,14 @@ while [[ true ]]; do
             echo "Updated all packages"
             ;;
         8)
+            lockRoot
+            echo "Locked root account"
+            ;;
+        9)
+            setPasswordPolicies
+            echo "Updated Password Policies"
+            ;;
+        10)
             echo "Exiting..."
             exit 0
             ;;
