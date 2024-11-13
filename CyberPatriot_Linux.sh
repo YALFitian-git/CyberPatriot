@@ -29,7 +29,7 @@ listPackages() {
 }
 
 listServices() {
-    sudo systemctl list-units --type=service --state=loaded --no-pager --no-legend | awk '{print $1}' | while read -r service; do
+    sudo systemctl list-units --type=service --state=running --no-pager --no-legend | awk '{print $1}' | while read -r service; do
         description=$(systemctl show -p Description --value "$service")
         echo "$service : $description" >> "$report_file"
     done
@@ -93,7 +93,8 @@ while [[ true ]]; do
     echo "6. Check for empty passwords"
     echo "7. Update packages"
     echo "8. Lock root account"
-    echo "9. Exit"
+    echo "9. Update password policies"
+    echo "10. Exit"
     echo ""
     read -p "Enter your choice: " choice
 
