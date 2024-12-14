@@ -140,9 +140,8 @@ while [[ true ]]; do
             exit 0
             ;;
         11)
-            #Add the critical services into the array below. I couldn't be bothered to have it be added by user input.
+            #Add the critical services into whitelist.txt.
             echo "This feature is still a work-in-progress."
-            whiteList=(Xwayland, PulseAudio, Evolution)
         *)
             echo "Invalid option."
     esac 
