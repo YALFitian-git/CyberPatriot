@@ -139,6 +139,9 @@ while [[ true ]]; do
             echo "Exiting..."
             exit 0
             ;;
+        11)
+            #Add the critical services into the array below. I couldn't be bothered to have it be added by user input.
+            whiteList=(
         *)
             echo "Invalid option."
     esac 
